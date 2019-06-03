@@ -1,0 +1,27 @@
+{
+  "name": "send-help",
+  "version": "1.0.0",
+  "description": "Generate developer friendly output of a help command based on a given object structure",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3rd-Eden/send-help.git"
+  },
+  "keywords": [
+    "send",
+    "help",
+    "cli"
+  ],
+  "author": "Arnout Kazemier",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/3rd-Eden/send-help/issues"
+  },
+  "homepage": "https://github.com/3rd-Eden/send-help#readme",
+  "dependencies": {
+    "kuler": "^1.0.1"
+  }
+}
