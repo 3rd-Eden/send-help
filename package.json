@@ -4,7 +4,8 @@
   "description": "Generate developer friendly output of a help command based on a given object structure",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test.js"
+    "test:runner": "mocha test.js",
+    "test": "nyc --reporter=text --reporter=json-summary npm run test:runner"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,10 @@
   "homepage": "https://github.com/3rd-Eden/send-help#readme",
   "dependencies": {
     "kuler": "^1.0.1"
+  },
+  "devDependencies": {
+    "assume": "^2.2.0",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1"
   }
 }

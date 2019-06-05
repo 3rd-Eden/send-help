@@ -4,15 +4,15 @@ const kuler = require('kuler');
  * Set of utilities that will write out output format to an internal
  * array so it can be used to compile an output.
  *
- * @param {Boolean} [colors] Colors are enabled
+ * @param {Boolean} [color] Colors are enabled
  * @returns {Object} The API.
  * @private
  */
-function writer(colors = true) {
+function writer(color = true) {
   const lines = [];
 
   return {
-    paint: colors ? kuler : (x) => (x),
+    paint: color ? kuler : (x) => (x),
     write: (...args) => lines.push(...args),
     header: (name) => lines.push(name.toUpperCase() + ':', ''),
     example: (code) => lines.push('  $ '+ code),
@@ -83,10 +83,11 @@ function help(data, {
   flags = {},           // Default values of your flags.
   prefix = 2,           // Amount of spaces to prefix descriptions.
   specific,             // Do we need to provide specific information.
-  colors,               // Enable the use of colors.
+  verbose,              // Always include _all_ detailed the information.
+  color,                // Enable the use of color.
   name                  // Name of your app.
 } = {}) {
-  const { write, header, example, paint, output } = writer(colors);
+  const { write, header, example, paint, output } = writer(color);
   const keys = Object.keys(data);
   const longestCommand = longest(keys);
   const longestFlag = longest(
@@ -94,6 +95,7 @@ function help(data, {
   );
 
   write(`${name} (version: ${paint(version, accent)})`);
+  write('');
   write(...block(0, description).map(line => paint(line, accent)));
   write('');
 
@@ -105,26 +107,26 @@ function help(data, {
 
     const command = data[method];
     const cmdFlags = command.flags;
-    const name = paint(method.padEnd(longestCommand, ' '), accent);
-    const cmdDesc = specific ? command.description.join(' ') : command.description[0];
+    const insert = paint(method.padEnd(longestCommand, ' '), accent);
+    const cmdDesc = (specific || verbose) ? command.description.join(' ') : command.description[0];
 
     write(...block(longestCommand + prefix, cmdDesc, {
       length: method.length,
-      prefix: name
+      prefix: insert
     }));
 
     Object.keys(cmdFlags).forEach(function listFlags(prop) {
       const indent = longestFlag + longestCommand + (prefix * 2);
 
-      let flagDesc = specific ? cmdFlags[prop].join(' ') : cmdFlags[prop][0];
+      let flagDesc = (specific || verbose) ? cmdFlags[prop].join(' ') : cmdFlags[prop][0];
       const flag = paint(prop.padStart(longestCommand + prefix), subtile);
 
       //
       // We assume that the CLI flags are 1on1 match with our provided default
       // flags. But we want to remove some common prefixes first.
       //
-      const clean = prop.replace(/^--(no-|disable-)?/, '');
-      if (specific && clean in flags) {
+      const clean = prop.replace(/^--/, '');
+      if ((specific || verbose) && clean in flags) {
         flagDesc += ' Current value: '+ paint(flags[clean].toString(), accent);
       }
 
@@ -138,7 +140,8 @@ function help(data, {
     write('');
 
     //
-    // Use did not request more detailed information, so lets bail out.
+    // Use did not request more detailed information, so lets bail out. In
+    // verbose mode this will just add more confusion.
     //
     if (!specific) return;
     if (command.examples && command.examples.length) {
@@ -153,10 +156,11 @@ function help(data, {
 
     if (command.debug) {
       header('Debugging');
-      write('Additional debug information for this command be found by starting it with DEBUG');
-      write('environment flag:');
+      write('This command is introspected with either `diagnostics` or `debug` to provide');
+      write('additional debugging information. This output can be enabled by setting the');
+      write('appropriate DEBUG environment flag before you run the command:');
       write('');
-      example(paint('DEBUG='+ command.debug, accent) + paint(` ${name} ${method} # The rest of you CLI flags here`, subtile));
+      example(paint('DEBUG='+ command.debug +` ${name} ${method} `, accent) + paint('# The rest of you CLI flags here', subtile));
       write('');
     }
   });
