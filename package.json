@@ -1,6 +1,6 @@
 {
   "name": "send-help",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Generate developer friendly output of a help command based on a given object structure",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/3rd-Eden/send-help#readme",
   "dependencies": {
-    "kuler": "^1.0.1"
+    "kuler": "^2.0.0"
   },
   "devDependencies": {
     "assume": "^2.2.0",
