@@ -76,7 +76,7 @@ function block(indent, data, { prefix, length, position = 0 } = {}) {
  * @public
  */
 function help(data, {
-  subtile = 'dimgray',  // Subtile color.
+  subtle = 'dimgray',   // Subtle color.
   version = '0.0.0',    // Version number your app.
   accent = 'orange',    // Accent color.
   description,          // Description of your app.
@@ -119,7 +119,7 @@ function help(data, {
       const indent = longestFlag + longestCommand + (prefix * 2);
 
       let flagDesc = (specific || verbose) ? cmdFlags[prop].join(' ') : cmdFlags[prop][0];
-      const flag = paint(prop.padStart(longestCommand + prefix), subtile);
+      const flag = paint(prop.padStart(longestCommand + prefix), subtle);
 
       //
       // We assume that the CLI flags are 1on1 match with our provided default
@@ -148,7 +148,7 @@ function help(data, {
       header('Examples');
 
       command.examples.forEach(function listExamples(code) {
-        example(paint(code, subtile));
+        example(paint(code, subtle));
       });
 
       write('');
@@ -160,7 +160,7 @@ function help(data, {
       write('additional debugging information. This output can be enabled by setting the');
       write('appropriate DEBUG environment flag before you run the command:');
       write('');
-      example(paint('DEBUG='+ command.debug +` ${name} ${method} `, accent) + paint('# The rest of you CLI flags here', subtile));
+      example(paint('DEBUG='+ command.debug +` ${name} ${method} `, accent) + paint('# The rest of you CLI flags here', subtle));
       write('');
     }
   });
@@ -169,7 +169,7 @@ function help(data, {
     header('Learn More');
     write('Each command has additional information available, you can find this by running:');
     write('');
-    example(paint(`${name} help `, subtile) + paint('<command>', accent));
+    example(paint(`${name} help `, subtle) + paint('<command>', accent));
     write('');
     write('Where '+ paint('<command>', accent) +' is the command you want to learn more of.');
   }
